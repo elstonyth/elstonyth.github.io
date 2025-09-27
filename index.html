@@ -10,7 +10,7 @@
   <meta property="og:title" content="Elston Yeo — Data Analyst">
   <meta property="og:description" content="Turning data into actionable insights.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yourusername.github.io/">
+  <meta property="og:url" content="https://elstonyth.github.io/">
   <meta property="og:image" content="assets/cover.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -164,9 +164,40 @@
     .stat-item:nth-child(2) { transition-delay: 0.2s; }
     .stat-item:nth-child(3) { transition-delay: 0.3s; }
     .stat-item:nth-child(4) { transition-delay: 0.4s; }
-  </style>
+  
+    /* Smooth theme transitions (scoped to common components) */
+    body, nav, section, .skill-category, .timeline-content, .project-card,
+    .contact-item, .stat-item, .btn, .contact-details, .contact-info, .timeline::before {
+      transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease,
+                  box-shadow 300ms ease, outline-color 300ms ease;
+    }
+
+    /* Theme wash overlay for expanding transition */
+    .theme-wash {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2000;
+      opacity: 0;
+      transform: scale(0.2);
+      transform-origin: var(--wash-x, 50%) var(--wash-y, 50%);
+      background: radial-gradient(1200px 1200px at var(--wash-x, 50%) var(--wash-y, 50%),
+                  var(--section-bg) 0%, var(--bg-color) 60%, var(--bg-color) 100%);
+    }
+
+    .theme-wash.active {
+      animation: themeWash 500ms ease forwards;
+    }
+
+    @keyframes themeWash {
+      0% { opacity: 0; transform: scale(0.2); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: scale(1.4); }
+    }
+</style>
 </head>
 <body>
+  <div class="theme-wash" id="themeWash"></div>
   <nav>
     <div class="nav-container">
       <div class="logo">Elston Yeo</div>
@@ -443,6 +474,7 @@
 
     // THEME TOGGLE with system preference default
     const themeBtn = document.getElementById('theme-toggle');
+    const themeWash = document.getElementById('themeWash');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
     const savedTheme = localStorage.getItem('theme'); // 'dark' | 'light' | null
 
@@ -454,8 +486,21 @@
     if (savedTheme === 'dark') document.body.classList.add('dark-mode');
     if (savedTheme === 'light') document.body.classList.add('light-mode');
     applyThemeIcon();
+    function triggerThemeWashFrom(el) {
+      const rect = el.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2 + window.scrollY;
+      document.documentElement.style.setProperty('--wash-x', x + 'px');
+      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
+      themeWash.classList.remove('active'); // reset if running
+      // Force reflow to restart animation
+      void themeWash.offsetWidth;
+      themeWash.classList.add('active');
+    }
+
 
     themeBtn.addEventListener('click', () => {
+      triggerThemeWashFrom(themeBtn);
       if (document.body.classList.contains('dark-mode')) {
         document.body.classList.remove('dark-mode');
         document.body.classList.add('light-mode');
@@ -474,9 +519,33 @@
         }
       }
       applyThemeIcon();
+    function triggerThemeWashFrom(el) {
+      const rect = el.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2 + window.scrollY;
+      document.documentElement.style.setProperty('--wash-x', x + 'px');
+      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
+      themeWash.classList.remove('active'); // reset if running
+      // Force reflow to restart animation
+      void themeWash.offsetWidth;
+      themeWash.classList.add('active');
+    }
+
     });
 
-    prefersDark.addEventListener('change', () => { if (!localStorage.getItem('theme')) applyThemeIcon(); });
+    prefersDark.addEventListener('change', () => { if (!localStorage.getItem('theme')) applyThemeIcon();
+    function triggerThemeWashFrom(el) {
+      const rect = el.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2 + window.scrollY;
+      document.documentElement.style.setProperty('--wash-x', x + 'px');
+      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
+      themeWash.classList.remove('active'); // reset if running
+      // Force reflow to restart animation
+      void themeWash.offsetWidth;
+      themeWash.classList.add('active');
+    }
+ });
   </script>
 </body>
 </html>
