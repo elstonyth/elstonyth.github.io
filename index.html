@@ -498,7 +498,6 @@
       themeWash.classList.add('active');
     }
 
-
     themeBtn.addEventListener('click', () => {
       triggerThemeWashFrom(themeBtn);
       if (document.body.classList.contains('dark-mode')) {
@@ -519,33 +518,15 @@
         }
       }
       applyThemeIcon();
-    function triggerThemeWashFrom(el) {
-      const rect = el.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2 + window.scrollY;
-      document.documentElement.style.setProperty('--wash-x', x + 'px');
-      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
-      themeWash.classList.remove('active'); // reset if running
-      // Force reflow to restart animation
-      void themeWash.offsetWidth;
-      themeWash.classList.add('active');
-    }
-
     });
 
-    prefersDark.addEventListener('change', () => { if (!localStorage.getItem('theme')) applyThemeIcon();
-    function triggerThemeWashFrom(el) {
-      const rect = el.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2 + window.scrollY;
-      document.documentElement.style.setProperty('--wash-x', x + 'px');
-      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
-      themeWash.classList.remove('active'); // reset if running
-      // Force reflow to restart animation
-      void themeWash.offsetWidth;
-      themeWash.classList.add('active');
-    }
- });
+    prefersDark.addEventListener('change', () => {
+      if (!localStorage.getItem('theme')) {
+        document.body.classList.toggle('dark-mode', prefersDark.matches);
+        document.body.classList.toggle('light-mode', !prefersDark.matches);
+        applyThemeIcon();
+      }
+    });
   </script>
 </body>
 </html>
