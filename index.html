@@ -179,20 +179,21 @@
       pointer-events: none;
       z-index: 2000;
       opacity: 0;
-      transform: scale(0.2);
+      transform: scale(0.05);
       transform-origin: var(--wash-x, 50%) var(--wash-y, 50%);
-      background: radial-gradient(1200px 1200px at var(--wash-x, 50%) var(--wash-y, 50%),
-                  var(--section-bg) 0%, var(--bg-color) 60%, var(--bg-color) 100%);
+      background: radial-gradient(circle farthest-corner at var(--wash-x, 50%) var(--wash-y, 50%),
+                  var(--section-bg) 0%, var(--bg-color) 60%, transparent 100%);
+      filter: blur(12px);
     }
 
     .theme-wash.active {
-      animation: themeWash 500ms ease forwards;
+      animation: themeWash 650ms ease-out forwards;
     }
 
     @keyframes themeWash {
-      0% { opacity: 0; transform: scale(0.2); }
-      30% { opacity: 1; }
-      100% { opacity: 0; transform: scale(1.4); }
+      0% { opacity: 0; transform: scale(0.05); }
+      20% { opacity: 1; }
+      100% { opacity: 0; transform: scale(2.2); }
     }
 </style>
 </head>
