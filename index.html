@@ -485,69 +485,48 @@
       themeBtn.textContent = isDark ? '☀️' : '🌙';
     }
 
+    function triggerThemeWashFrom(el) {
+      const rect = el.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2 + window.scrollY;
+      document.documentElement.style.setProperty('--wash-x', x + 'px');
+      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
+      themeWash.classList.remove('active'); // reset if running
+      // Force reflow to restart animation
+      void themeWash.offsetWidth;
+      themeWash.classList.add('active');
+    }
+
     if (savedTheme === 'dark') document.body.classList.add('dark-mode');
     if (savedTheme === 'light') document.body.classList.add('light-mode');
     applyThemeIcon();
-    function triggerThemeWashFrom(el) {
-      const rect = el.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2 + window.scrollY;
-      document.documentElement.style.setProperty('--wash-x', x + 'px');
-      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
-      themeWash.classList.remove('active'); // reset if running
-      // Force reflow to restart animation
-      void themeWash.offsetWidth;
-      themeWash.classList.add('active');
-    }
-
 
     themeBtn.addEventListener('click', () => {
       triggerThemeWashFrom(themeBtn);
-      if (document.body.classList.contains('dark-mode')) {
-        document.body.classList.remove('dark-mode');
-        document.body.classList.add('light-mode');
-        localStorage.setItem('theme', 'light');
-      } else if (document.body.classList.contains('light-mode')) {
-        document.body.classList.remove('light-mode');
-        document.body.classList.add('dark-mode');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        if (prefersDark.matches) {
-          document.body.classList.add('light-mode');
-          localStorage.setItem('theme', 'light');
-        } else {
-          document.body.classList.add('dark-mode');
-          localStorage.setItem('theme', 'dark');
-        }
-      }
-      applyThemeIcon();
-    function triggerThemeWashFrom(el) {
-      const rect = el.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2 + window.scrollY;
-      document.documentElement.style.setProperty('--wash-x', x + 'px');
-      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
-      themeWash.classList.remove('active'); // reset if running
-      // Force reflow to restart animation
-      void themeWash.offsetWidth;
-      themeWash.classList.add('active');
-    }
 
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      const isLightMode = document.body.classList.contains('light-mode');
+      let nextTheme;
+
+      if (isDarkMode) {
+        nextTheme = 'light';
+      } else if (isLightMode) {
+        nextTheme = 'dark';
+      } else {
+        nextTheme = prefersDark.matches ? 'light' : 'dark';
+      }
+
+      document.body.classList.remove('light-mode', 'dark-mode');
+      document.body.classList.add(`${nextTheme}-mode`);
+      localStorage.setItem('theme', nextTheme);
+      applyThemeIcon();
     });
 
-    prefersDark.addEventListener('change', () => { if (!localStorage.getItem('theme')) applyThemeIcon();
-    function triggerThemeWashFrom(el) {
-      const rect = el.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2 + window.scrollY;
-      document.documentElement.style.setProperty('--wash-x', x + 'px');
-      document.documentElement.style.setProperty('--wash-y', (y - window.scrollY) + 'px');
-      themeWash.classList.remove('active'); // reset if running
-      // Force reflow to restart animation
-      void themeWash.offsetWidth;
-      themeWash.classList.add('active');
-    }
- });
+    prefersDark.addEventListener('change', () => {
+      if (!localStorage.getItem('theme')) {
+        applyThemeIcon();
+      }
+    });
   </script>
 </body>
 </html>
