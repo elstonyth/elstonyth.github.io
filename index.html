@@ -129,9 +129,44 @@
       position: relative;
       overflow: hidden;
     }
-    :root {
-      /* used to keep hero height balanced vs fixed nav */
-      --nav-h: 60px;
+
+    /* ---- Hero Enhancements ---- */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 70%),
+        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1), transparent 70%);
+      animation: floatBlobs 18s ease-in-out infinite alternate;
+      filter: blur(40px);
+      opacity: 0.6;
+    }
+    @keyframes floatBlobs {
+      from { transform: translate(-20px, -20px) scale(1); }
+      to   { transform: translate(40px, 40px) scale(1.2); }
+    }
+    .hero .intro {
+      font-size: 1.3rem;
+      max-width: 680px;
+      margin: 0 auto 1rem;
+      opacity: 0.9;
+    }
+    .hero .subtext {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 2rem;
+    }
+    .scroll-cue {
+      font-size: 1rem;
+      opacity: 0;
+      animation: fadeScroll 2s ease-in-out 2s infinite alternate;
+    }
+    @keyframes fadeScroll {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(-4px); }
+ main
     }
 
     /* Use safe, responsive hero height and top balance */
@@ -142,7 +177,7 @@
       position: relative; /* for ::after vignette & scroll cue */
     }
 
-    /* Constrain content width so it doesn't look like random floating text */
+ main
     .hero-content {
       position: relative;
       z-index: 2;
@@ -152,7 +187,12 @@
       text-align: center;
     }
 
-    /* Text hierarchy tuned for desktop & mobile */
+    .hero-content > *:nth-child(1) { animation-delay: 0.3s; }
+    .hero-content > *:nth-child(2) { animation-delay: 0.5s; }
+    .hero-content > *:nth-child(3) { animation-delay: 0.7s; }
+    .hero-content > *:nth-child(4) { animation-delay: 0.9s; }
+    .hero-content > *:nth-child(5) { animation-delay: 1.1s; }
+ main
     .hero h1 {
       /* graceful scaling; premium rhythm */
       font-size: clamp(2.4rem, 4.6vw, 4.2rem);
@@ -179,94 +219,7 @@
       text-wrap: balance;
     }
 
-    .hero .subtext {
-      font-size: clamp(0.98rem, 0.45vw + 0.85rem, 1.1rem);
-      opacity: 0.85;
-      margin-bottom: 1.8rem;
-      color: rgba(255,255,255,0.85);
-    }
-
-    /* CTA refinement */
-    .cta-buttons { display: flex; gap: 0.9rem; flex-wrap: wrap; justify-content: center; }
-    .cta-buttons .btn { box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-    .cta-buttons .btn:hover { transform: translateY(-2px); }
-
-    /* Subtle vignette for focus (premium, very light) */
-    .hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(1200px 600px at 50% 38%,
-          rgba(0,0,0,0.16), transparent 60%);
-      mix-blend-mode: soft-light; /* elegant depth on both themes */
-    }
-
-    /* Bottom-centered scroll cue (already added earlier) */
-    .scroll-cue {
-      position: absolute;
-      left: 50%;
-      bottom: calc(16px + env(safe-area-inset-bottom));
-      transform: translate(-50%, 0);
-      display: inline-flex; align-items: center; gap: .4rem;
-      padding: .5rem .75rem;
-      border-radius: 999px;
-      border: 1px solid var(--border-color);
-      background: color-mix(in hsl, var(--section-bg) 70%, transparent);
-      backdrop-filter: blur(6px);
-      font-weight: 600;
-      text-decoration: none;
-      color: white;
-      opacity: 0;
-      animation: cueFade 800ms ease 600ms forwards, cueBob 1.8s ease-in-out 1.4s infinite;
-    }
-    @keyframes cueFade { to { opacity: 1; } }
-    @keyframes cueBob {
-      0%,100% { transform: translate(-50%, 0); }
-      50%      { transform: translate(-50%, -6px); }
-    }
-
-    /* Mobile polish */
-    @media (max-width: 768px) {
-      .hero { padding-bottom: clamp(40px, 12vh, 96px); }
-      .hero .intro { margin-bottom: 0.4rem; }
-      .cta-buttons .btn { padding: 0.85rem 1.2rem; }
-    }
-    @media (max-width: 480px) {
-      .scroll-cue { bottom: calc(12px + env(safe-area-inset-bottom)); padding: .6rem .9rem; }
-    }
-
-    /* Reduced motion users get a still, clean UI */
-    @media (prefers-reduced-motion: reduce) {
-      .scroll-cue { animation: none; opacity: 1; }
-    }
-    /* ---- Hero Enhancements ---- */
-    .hero::before {
-      content: '';
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 70%),
-        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1), transparent 70%);
-      animation: floatBlobs 18s ease-in-out infinite alternate;
-      filter: blur(36px);
-      opacity: 0.25;
-    }
-    @keyframes floatBlobs {
-      from { transform: translate(-20px, -20px) scale(1); }
-      to   { transform: translate(40px, 40px) scale(1.2); }
-    }
-    .hero-content > * {
-      opacity: 0;
-      transform: translateY(24px);
-      animation: fadeUp 0.9s ease forwards;
-    }
-    .hero-content > *:nth-child(1) { animation-delay: 0.3s; }
-    .hero-content > *:nth-child(2) { animation-delay: 0.5s; }
-    .hero-content > *:nth-child(3) { animation-delay: 0.7s; }
-    .hero-content > *:nth-child(4) { animation-delay: 0.9s; }
-    .hero-content > *:nth-child(5) { animation-delay: 1.1s; }
+ main
     .hero p:not(.intro):not(.subtext) {
       font-size: clamp(1.1rem, 1rem + 0.4vw, 1.35rem);
       margin-bottom: 2rem;
