@@ -423,9 +423,31 @@
     // Mobile nav toggle
     const navToggle = document.getElementById('nav-toggle');
     const navLinks = document.getElementById('nav-links');
-    if (navToggle) {
+
+    const updateNavToggleState = (isOpen) => {
+      if (!navToggle) return;
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+      navToggle.textContent = isOpen ? '✕' : '☰';
+    };
+
+    if (navToggle && navLinks) {
       navToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('open');
+        const isOpen = navLinks.classList.toggle('open');
+        updateNavToggleState(isOpen);
+      });
+      updateNavToggleState(false);
+    }
+
+    if (navLinks) {
+      navLinks.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          if (!navToggle) return;
+          const navToggleVisible = window.getComputedStyle(navToggle).display !== 'none';
+          const menuIsMobile = navLinks.classList.contains('open') || navToggleVisible;
+          if (!menuIsMobile) return;
+          navLinks.classList.remove('open');
+          updateNavToggleState(false);
+        });
       });
     }
 
